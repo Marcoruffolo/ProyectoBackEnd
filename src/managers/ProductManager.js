@@ -7,9 +7,8 @@ class ProductManager {
     }
 
     async getProducts() {
-        let data = await fs.readFile(this.path, "utf-8");
-        let result = JSON.parse(data);
-        return result;
+        const data = await fs.readFile(this.path, "utf-8");
+        return JSON.parse(data);
     }
 
     async getProductById(id) {
