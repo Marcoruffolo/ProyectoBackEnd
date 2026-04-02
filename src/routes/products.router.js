@@ -9,4 +9,27 @@ router.get("/", async (req, res) => {
     res.json(products);
 });
 
+router.get("/:pid", async (req, res) => {
+    const pid = Number(req.params.pid);
+    const product = await productManager.getProductById(pid);
+    res.json(product);
+});
+
+router.post("/", async (req, res) => {
+    const product = await productManager.addProduct(req.body);
+    res.json(product);
+});
+
+router.put("/:pid", async (req, res) => {
+    const pid = Number(req.params.pid);
+    const product = await productManager.updateProduct(pid, req.body);
+    res.json(product);
+});
+
+router.delete("/:pid", async (req, res) => {
+    const pid = Number(req.params.pid);
+    const product = await productManager.deleteProduct(pid);
+    res.json(product);
+})
+
 export default router;
