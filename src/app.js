@@ -1,0 +1,16 @@
+import express from "express";
+import productsRouter from "./routes/products.router.js";
+
+const app = express();
+
+app.use(express.json());
+
+app.use("/api/products", productsRouter);
+
+app.get("/test", (req, res) => {
+    res.json({ mensaje: "servidor funcionando" });
+});
+
+app.listen(8080, () => {
+    console.log("Servidor corriendo en puerto 8080");
+});
