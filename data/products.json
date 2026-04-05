@@ -1,20 +1,12 @@
 [
   {
-    "id": 1,
-    "title": "Producto de prueba",
-    "description": "Descripción de prueba",
-    "code": "ABC123",
-    "price": 999,
-    "status": true,
-    "stock": 50,
-    "category": "test",
-    "thumbnails": []
+    "id": 1775354009928,
+    "title": "huevo",
+    "price": "50"
   },
   {
-    "id": 1775146736051,
-    "name": "Add your name in the body"
-  },
-  {
-    "id": 1775147023183
+    "id": 1775354011237,
+    "title": "huevo",
+    "price": "50"
   }
 ]

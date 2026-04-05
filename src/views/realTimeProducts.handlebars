@@ -9,6 +9,40 @@
     {{/each}}
 </ul>
 
+<form>
+    <input type="text" placeholder="Título" id="title">
+    <input type="number" placeholder="Precio" id="price">
+    <button type="button">Agregar producto</button>
+</form>
+
 <script src="/socket.io/socket.io.js"></script>
 
-<script>const socket = io();</script>
+<script>
+    const socket = io();
+    const ul = document.querySelector("ul");
+
+    document.querySelector("button").addEventListener("click", () => {
+        const title = document.querySelector("#title").value;
+        const price = document.querySelector("#price").value;
+        socket.emit("newProduct", { title, price });
+    });
+
+    ul.addEventListener("click", (e) => {
+    if (e.target.tagName === "BUTTON") {
+        const id = Number(e.target.dataset.id);
+        socket.emit("deleteProduct", id);
+    }
+});
+
+    socket.on("updateProducts", (products) => {
+        const ul = document.querySelector("ul");
+        ul.innerHTML = products.map(p => `
+            <li>
+                <p>${p.title}</p>
+                <p>${p.price}</p>
+                <button data-id="${p.id}">X</button>
+            </li>
+        `).join("");
+        
+    });
+</script>

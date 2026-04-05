@@ -24,12 +24,12 @@ app.get("/test", (req, res) => {
 
 app.get("/", async (req, res) => {
     const products = await productManager.getProducts();
-    res.render("home", {products});
+    res.render("home", { products });
 });
 
 app.get("/realTimeProducts", async (req, res) => {
     const products = await productManager.getProducts();
-    res.render("realTimeProducts", {products});
+    res.render("realTimeProducts", { products });
 });
 
 const httpServer = app.listen(8080, () => {
@@ -40,4 +40,15 @@ const io = new Server(httpServer);
 
 io.on("connection", (socket) => {
     console.log("Cliente conectado");
+    socket.on("newProduct", async (data) => {
+        const product = await productManager.addProduct(data);
+        const products = await productManager.getProducts();
+        io.emit("updateProducts", products);
+    });
+
+    socket.on("deleteProduct", async (id) => {
+        const product = await productManager.deleteProduct(id);
+        const products = await productManager.getProducts();
+        io.emit("updateProducts", products);
+    })
 });
