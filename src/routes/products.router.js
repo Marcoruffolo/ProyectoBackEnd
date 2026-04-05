@@ -2,34 +2,43 @@ import { Router } from "express";
 import ProductManager from "../managers/productManager.js";
 
 const productManager = new ProductManager("./data/products.json");
-const router = Router();
+const createRouter = (io) => {
+    const router = Router();
 
-router.get("/", async (req, res) => {
-    const products = await productManager.getProducts();
-    res.json(products);
-});
 
-router.get("/:pid", async (req, res) => {
-    const pid = Number(req.params.pid);
-    const product = await productManager.getProductById(pid);
-    res.json(product);
-});
 
-router.post("/", async (req, res) => {
-    const product = await productManager.addProduct(req.body);
-    res.json(product);
-});
+    router.get("/", async (req, res) => {
+        const products = await productManager.getProducts();
+        res.json(products);
+    });
 
-router.put("/:pid", async (req, res) => {
-    const pid = Number(req.params.pid);
-    const product = await productManager.updateProduct(pid, req.body);
-    res.json(product);
-});
+    router.get("/:pid", async (req, res) => {
+        const pid = Number(req.params.pid);
+        const product = await productManager.getProductById(pid);
+        res.json(product);
+    });
 
-router.delete("/:pid", async (req, res) => {
-    const pid = Number(req.params.pid);
-    const product = await productManager.deleteProduct(pid);
-    res.json(product);
-})
+    router.post("/", async (req, res) => {
+        const product = await productManager.addProduct(req.body);
+        const products = await productManager.getProducts();
+        io.emit("updateProducts", products);
+        res.json(product);
+    });
 
-export default router;
+    router.put("/:pid", async (req, res) => {
+        const pid = Number(req.params.pid);
+        const product = await productManager.updateProduct(pid, req.body);
+        res.json(product);
+    });
+
+    router.delete("/:pid", async (req, res) => {
+        const pid = Number(req.params.pid);
+        const product = await productManager.deleteProduct(pid);
+        const products = await productManager.getProducts();
+        io.emit("updateProducts", products);
+        res.json(product);
+    })
+
+    return router;
+};
+export default createRouter;
