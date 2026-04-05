@@ -1,0 +1,14 @@
+<h1>Lista productos</h1>
+
+<ul>
+    {{#each products}}
+    <li>
+        <p>{{this.title}}</p>
+        <p>{{this.price}}</p>
+    </li>
+    {{/each}}
+</ul>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>const socket = io();</script>
