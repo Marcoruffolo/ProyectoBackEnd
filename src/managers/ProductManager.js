@@ -1,61 +1,26 @@
-import fs from "fs/promises";
+
+import Product from "../models/Product.js";
 
 class ProductManager {
 
-    constructor(path) {
-        this.path = path;
-    }
-
     async getProducts() {
-        const data = await fs.readFile(this.path, "utf-8");
-        return JSON.parse(data);
+        return await Product.find();
     }
 
     async getProductById(id) {
-        const products = await this.getProducts();
-        const product = products.find(product => product.id === id);
-        if (!product) {
-            return null;
-        }
-        return product;
+        return await Product.findById(id); 
     }
 
     async addProduct(productData) {
-
-        const products = await this.getProducts();
-        const newProduct = {
-            id: Date.now(),
-            ...productData
-        }
-        products.push(newProduct);
-        await fs.writeFile(this.path, JSON.stringify(products, null, 2));
-        return newProduct;
+        return await Product.create(productData);
     }
 
     async updateProduct(id, updatedData) {
-        const products = await this.getProducts();
-        const index = products.findIndex((p) => p.id === id);
-        if (index === -1) {
-            return null;
-        }
-        const { id: _, ...dataWithoutId } = updatedData;
-        products[index] = {
-            ...products[index],
-            ...dataWithoutId
-        }
-        await fs.writeFile(this.path, JSON.stringify(products, null, 2));
-        return products[index];
+        return await Product.findByIdAndUpdate(id, updatedData, { new : true});
     }
 
     async deleteProduct(id) {
-        const products = await this.getProducts();
-        const index = products.findIndex((p) => p.id === id);
-        if (index === -1) {
-            return null;
-        }
-        const deletedProduct = products.splice(index, 1);
-        await fs.writeFile(this.path, JSON.stringify(products, null, 2));
-        return deletedProduct[0];
+        return await  Product.findByIdAndDelete(id);
     }
 }
 

@@ -4,10 +4,13 @@ import cartsRouter from "./routes/carts.router.js";
 import { engine } from "express-handlebars";
 import ProductManager from "./managers/productManager.js"
 import { Server } from "socket.io";
+import connectDB from "./config/db.js";
 
 const productManager = new ProductManager("./data/products.json");
 
 const app = express();
+
+connectDB();
 
 app.use(express.json());
 app.use("/api/carts", cartsRouter);
