@@ -11,8 +11,8 @@ const app = express();
 
 app.use(express.json());
 app.use("/api/carts", cartsRouter);
-
 app.engine("handlebars", engine());
+
 app.set("view engine", "handlebars");
 app.set("views", "./src/views");
 

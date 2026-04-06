@@ -9,8 +9,10 @@
     "dev": "nodemon src/app.js"
   },
   "dependencies": {
+    "dotenv": "^17.4.1",
     "express": "^4.x.x",
     "express-handlebars": "^9.0.1",
+    "mongoose": "^9.4.1",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
