@@ -3,8 +3,20 @@ import Product from "../models/Product.js";
 
 class ProductManager {
 
-    async getProducts() {
-        return await Product.find();
+    async getProducts({ limit = 10, page = 1, sort, query}) {
+
+        const sortOption = sort ? {price : sort === "asc" ? 1 : -1} : {}
+
+        const filterOption = query ? {category : query} : {};
+
+        const filter =  filterOption;
+        const options = {
+            limit : limit,
+            page : page,
+            sort: sortOption 
+            
+        }
+        return await Product.paginate(filter,options);
     }
 
     async getProductById(id) {

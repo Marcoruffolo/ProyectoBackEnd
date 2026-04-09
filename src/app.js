@@ -5,8 +5,10 @@ import { engine } from "express-handlebars";
 import ProductManager from "./managers/productManager.js"
 import { Server } from "socket.io";
 import connectDB from "./config/db.js";
+import CartManager from "./managers/cartManager.js";
 
-const productManager = new ProductManager("./data/products.json");
+const productManager = new ProductManager();
+const cartManager = new CartManager();
 
 const app = express();
 
@@ -23,9 +25,28 @@ app.get("/test", (req, res) => {
     res.json({ mensaje: "servidor funcionando" });
 });
 
-app.get("/", async (req, res) => {
-    const products = await productManager.getProducts();
-    res.render("home", { products });
+app.get("/products", async (req, res) => {
+    const { limit, page, sort, query } = req.query;
+    const result = await productManager.getProducts({ limit, page , sort , query});
+    res.render("home", { products: result.docs,
+        totalPages: result.totalPages,
+        page: result.page,
+        hasPrevPage: result.hasPrevPage,
+        hasNextPage: result.hasNextPage,
+        prevPage: result.prevPage,
+        nextPage: result.nextPage });
+});
+
+app.get("/carts/:cid", async (req, res) => {
+    const { cid } = req.params;
+    const cart = await cartManager.getCartById(cid);
+    res.render("cart", { cart });
+});
+
+app.get("/products/:pid", async (req, res) => {
+    const { pid } = req.params;
+    const product = await productManager.getProductById(pid);
+    res.render("product", { product });
 });
 
 app.get("/realTimeProducts", async (req, res) => {

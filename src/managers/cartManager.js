@@ -10,6 +10,10 @@ class CartManager {
         return await Cart.create({ products: []});
     }
 
+    async getCartById(id){
+        return await Cart.findById(id).populate("products.product");
+    }
+
     async addProductToCart(cartId, productId) {       
         const cart = await Cart.findById(cartId);
         if(!cart) return null; 
